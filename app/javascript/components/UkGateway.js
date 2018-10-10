@@ -1,9 +1,20 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Gateway from "./Gateway"
+import Registration from "./Registration"
 class UkGateway extends React.Component {
   render () {
     return (
-      <h1>UK</h1>
+      <Gateway>
+        <Registration>
+          <div>
+            <label>
+              Postcode:
+              <input name="postcode"/>
+            </label>
+          </div>
+        </Registration>
+      </Gateway>
     );
   }
 }
