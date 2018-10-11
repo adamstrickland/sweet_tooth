@@ -5,7 +5,7 @@ import Registration from "./Registration"
 class UkGateway extends React.Component {
   render () {
     return (
-      <Gateway>
+      <Gateway locale="en_GB">
         <Registration>
           <div>
             <label>
