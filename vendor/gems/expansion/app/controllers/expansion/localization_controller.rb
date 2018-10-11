@@ -1,12 +1,10 @@
+require_dependency "expansion/application_controller"
+require_relative "../../services/expansion/localization_service"
+
 module Expansion
   class LocalizationController < ApplicationController
     def index
-      file = "config/localization.yml"
-      path = File.join(File.dirname(__FILE__), "../../../#{file}")
-      ctnt = File.read(path)
-      data = YAML.load(ctnt)
-
-      render json: data
+      render json: ::Expansion::LocalizationService.()
     end
   end
 end
