@@ -8,8 +8,8 @@ x-settings: &settings
 x-default: &default
   image: agts/ruby:2.5
   links:
-    - postgres
-    - rabbitmq
+    - &pglink postgres
+    - &rabbitlink rabbitmq
   environment: &env
     <<: *baseenv
     RABBITMQ_URL: amqp://rabbitmq:5672
@@ -32,16 +32,24 @@ services:
       - *gems
     ports:
       - 7272:3000
+    links:
+      - *pglink
+      - *rabbitlink
+      - clientsvc
     environment:
       <<: *env
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/sweet_tooth_webapp_development
 
-  # clientsvc:
-    # <<: *default
-    # command: bundle exec rake sneakers:run
-    # volumes:
-      # - *gems
-      # - ./clientsvc:/usr/src/app
+  clientsvc:
+    <<: *default
+    volumes:
+      - *gems
+      - ./clientsvc:/usr/src/app
+    ports:
+      - 7273:3000
+    environment:
+      <<: *env
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/sweet_tooth_clientsvc_development
 
   postgres:
     image: postgres
