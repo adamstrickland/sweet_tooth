@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 class Registration extends React.Component {
   render () {
     return (
-      <form>
+      <form action="/dashboard" method="GET">
         <div>
           <label>
             First Name:

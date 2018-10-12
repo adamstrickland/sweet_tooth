@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/dashboard', to: "dashboard#index"
   root to: "us#index", constraints: ->(r){ r.domain(2) =~ /somedomain\.com/ }
   root to: "uk#index", constraints: ->(r){ r.domain(2) =~ /somedomain\.co\.uk/ }
   get '/us', to: "us#index"
