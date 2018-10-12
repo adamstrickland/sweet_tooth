@@ -1,0 +1,59 @@
+version: '3.4'
+
+x-settings: &settings
+  environment: &baseenv
+    POSTGRES_USER: &pg postgres
+    POSTGRES_PASSWORD: *pg
+
+x-default: &default
+  image: agts/ruby:2.5
+  links:
+    - postgres
+    - rabbitmq
+  environment: &env
+    <<: *baseenv
+    RABBITMQ_URL: amqp://rabbitmq:5672
+    BUNDLE_PATH: /gems/ruby/2.5.0
+
+services:
+  master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: agts/ruby:2.5
+    volumes:
+      - &gems ./.gems:/gems
+
+  webapp:
+    <<: *default
+    volumes:
+      - ./webapp:/usr/src/app
+      - ./expansion:/usr/src/app/vendor/gems/expansion
+      - *gems
+    ports:
+      - 7272:3000
+    environment:
+      <<: *env
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/sweet_tooth_webapp_development
+
+  # clientsvc:
+    # <<: *default
+    # command: bundle exec rake sneakers:run
+    # volumes:
+      # - *gems
+      # - ./clientsvc:/usr/src/app
+
+  postgres:
+    image: postgres
+    environment:
+      <<: *baseenv
+      PGDATA: /data
+    volumes:
+      - ./.data:/data
+    ports:
+      - 5432
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 5672

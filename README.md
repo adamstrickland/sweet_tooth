@@ -1,4 +1,63 @@
-## TLD-based routing
+# Sweet Tooth
+
+## Setup
+
+1. Create a local bundler config and set the `BUNDLE_PATH` to be `$(pwd)/.gems`
+
+  ```
+  echo "BUNDLE_PATH: '$(pwd)/.gems'" >> .bundle/config
+  ```
+
+1. Build local bundler dependencies
+
+  ```bash
+  bundle install
+  ```
+
+1. Build app bundler dependencies
+
+  ```bash
+  bundle exec rake bundle:install
+  ```
+
+1. Now build the image(s)
+
+  ```bash
+  docker-compose build master
+  ```
+
+1. Create the databases.  
+
+  - First, in one shell start the db:
+
+    ```bash
+    docker-compose up postgres
+    ```
+
+  - Now, in a separate shell, create the databases
+
+    ```bash
+    psql postgres://postgres:postgres@$(docker-compose port postgres 5432)/postgres -c 'create database sweet_tooth_webapp_development;'
+    psql postgres://postgres:postgres@$(docker-compose port postgres 5432)/postgres -c 'create database sweet_tooth_webapp_test;'
+    psql postgres://postgres:postgres@$(docker-compose port postgres 5432)/postgres -c 'create database sweet_tooth_clientsvc_development;'
+    psql postgres://postgres:postgres@$(docker-compose port postgres 5432)/postgres -c 'create database sweet_tooth_clientsvc_test;'
+    ```
+
+1. Start the system
+
+  ```bash
+  docker-compose up
+  ```
+
+1. Browse, baby:
+
+  ```bash
+  open http://somedomain.com:$(docker-compose port webapp 3000)
+  ```
+
+## Notes
+
+### TLD-based routing
 
 To get TLD-based routing to work on a local machine, edit your `/etc/hosts`:
 
@@ -14,7 +73,7 @@ bundle exec bin/rails server -p 7272
 
 And visit the appropriate domain, e.g. `http://somedomain.com:7272` to view the US "site", `http://somedomain.co.uk:7272` for the UK "site".
 
-## Overview
+### Overview
 
 Uses Rails 5 w/ built-in webpack/react support, i.e. [`webpacker`](https://github.com/rails/webpacker) and [`react-rails`](https://github.com/reactjs/react-rails).
 
