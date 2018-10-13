@@ -1,8 +1,9 @@
 <h1>Stitch Fix Dashboard</h1>
+<h2>Welcome, <%= @client[:name] %></h2>
 <nav>
   <ul>
     <li><%= link_to :foo %></li>
-    <li><%= link_to :bar %></li>
+    <li><%= restricted(:bar, @features) { link_to :bar } %></li>
   </ul>
 </nav>
 <p><%= expansion :dashboard_content %></p>

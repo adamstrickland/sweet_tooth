@@ -39,6 +39,7 @@ services:
     environment:
       <<: *env
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/sweet_tooth_webapp_development
+      CLIENT_SERVICE_ENDPOINT: http://clientsvc:3000
 
   clientsvc:
     <<: *default
